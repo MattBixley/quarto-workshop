@@ -1,5 +1,12 @@
 ---
 title: "Quarto for Data Science Reporting"
+author: 
+  name: Matt Bixley
+  affiliations:
+      - name: REANNZ, UoO, GA
+  degrees:
+    - BSc (Chemistry)
+    - PGDip (Applied Statistics)
 format:
   html:
     code-fold: true
