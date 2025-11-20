@@ -1,0 +1,80 @@
+---
+title: "Penguin report (parameterized)"
+format: html
+params:
+  filter_by: "species"   # allowed: "species" or "island"
+  value: "Adelie"        # default value
+bibliography: references.bib
+---
+
+# Parameterized report
+
+This report is parameterized. Use the `params$filter_by` and `params$value` to control which subset of the data is analyzed. You can render this in R with quarto::quarto_render("param-report.qmd", execute_params = list(filter_by = "species", value = "Chinstrap")) or use the Visual Editor to change parameters interactively.
+
+Selected filter: **`r params$filter_by`** = **`r params$value`**.
+
+```{r}
+#| label: setup-params
+#| include: false
+library(tidyverse)
+library(palmerpenguins)
+library(gt)
+data("penguins", package = "palmerpenguins")
+
+# build filtered dataset based on params
+if (params$filter_by == "species") {
+  filtered <- penguins %>% filter(species == params$value)
+} else if (params$filter_by == "island") {
+  filtered <- penguins %>% filter(island == params$value)
+} else {
+  filtered <- penguins
+}
+```
+
+Quick numbers
+
+```{r}
+#| label: quick-numbers
+#| echo: false
+
+n_obs <- nrow(filtered)
+n_complete <- sum(complete.cases(filtered))
+```
+
+This subset contains r n_obs rows and r n_complete complete rows.
+
+### Table for the selected subset
+```{r}
+#| label: tbl-params-summary
+#| tbl-cap: "Summary for the selected subset."
+#| echo: false
+#| include: true
+
+filtered %>%
+  summarise(
+    n = sum(!is.na(body_mass_g)),
+    mean_body_mass = mean(body_mass_g, na.rm = TRUE),
+    mean_flipper = mean(flipper_length_mm, na.rm = TRUE)
+  ) %>%
+  mutate(filter_by = params$filter_by, value = params$value) %>%
+  gt()
+```
+
+### Plot for the selected subset
+
+```{r}
+#| label: fig-params-bodymass
+#| fig-cap: "Body mass distribution for the selected subset."
+#| echo: false
+
+ggplot(filtered, aes(x = body_mass_g)) +
+  geom_histogram(binwidth = 200, fill = "steelblue", color = "white", na.rm = TRUE) +
+  theme_minimal() +
+  labs(x = "Body mass (g)", y = "Count")
+```
+
+Notes:
+- You can render this with different parameters from R (see the inline example) or change `params` values manually in the YAML and re-render.
+- Parameterization in Quarto is described in the Quarto docs and R for Data Science chapters on Quarto parameters and YAML usage.
+
+
