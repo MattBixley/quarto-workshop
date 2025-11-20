@@ -5,8 +5,8 @@ format:
     code-fold: true
     echo: true
     number-sections: true
-    warnings: false
-    messages: false
+    warning: false
+    message: false
 toc: true
 crossref:
   fig-title: Figure  # (default is "Figure")
@@ -34,6 +34,8 @@ library(tidyverse)
 library(palmerpenguins)
 library(gt)
 library(ggplot2)
+library(scales)
+
 # ensure the dataset is available
 data("penguins", package = "palmerpenguins")
 ```
@@ -50,7 +52,9 @@ summary_tbl <- penguins %>%
   skimr::skim() # quick check; not printed in final doc
 ```
 
-## Table: species-level summary
+## Tables 
+
+### species-level summary
 
 The table below summarizes key numeric variables grouped by species (mean and count). The table is generated with gt and captioned so it can be cross-referenced in the text (@tbl-species-summary).
 
@@ -84,6 +88,8 @@ species_summary %>%
 
 Refer to @tbl-species-summary for species summaries.
 
+### individuals
+
 ```{R}
 #| label: tbl-observations
 #| tbl-cap: "Numeric measurements of individuals."
@@ -111,9 +117,35 @@ penguins %>%
   )
 ```
 
-Refer to @tbl-observations for the individual observations.
+Refer to @tbl-observations for the individual observations and to @tbl-colours for a table with colourized cells.
 
-### Plots: distributions and comparisons
+### colours
+
+```{R}
+#| label: tbl-colours
+#| tbl-cap: "Body mass (g)."
+
+body_range <- range(penguins$body_mass_g, na.rm = TRUE)
+
+penguins %>%
+  slice_head(n = 10) %>%
+  gt() %>%
+  cols_label(body_mass_g = "Body mass (g) with highlighting") %>%
+  data_color(
+    columns = c("body_mass_g"),
+    colors = col_numeric(
+      palette = c("lightyellow", "orange", "red"),
+      domain = body_range
+    )
+  ) %>%
+  fmt_number(columns = vars(body_mass_g), decimals = 0)
+```
+
+
+
+## Plots
+
+### distributions and comparisons
 
 The following figure shows body mass distributions by species (@fig-bodymass-by-species). The chunk has a fig-cap so Quarto creates a numbered figure and allows cross-references.
 
@@ -140,11 +172,11 @@ ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
 
 ```
 
-## Inline code and dynamic text
+# Inline code and dynamic text
 
-This document uses inline R to include computed values in prose. For example, the dataset contains `r sum(!is.na(penguins$body_mass_g))` recorded body mass measurements across all observations.
+This document uses inline R to include computed values in prose. For example, the dataset contains **`r sum(!is.na(penguins$body_mass_g))`** recorded body mass measurements across all observations.
 
-## Reproducibility and references
+# Reproducibility and references
 
 Quarto uses knitr and Pandoc to run code and produce finished outputs; this workflow enables reproducible documents that combine narrative and analysis. For a compact tutorial and workshop materials, see the Quarto workshop and documentation resources referenced here.
 
