@@ -3,11 +3,14 @@ title: "Quarto for Data Science Reporting"
 format:
   html:
     code-fold: true
+    echo: true
     number-sections: true
+    warnings: false
+    messages: false
 toc: true
 crossref:
-  fig-title: Figure     # (default is "Figure")
-  tbl-title: Table     # (default is "Table")
+  fig-title: Figure  # (default is "Figure")
+  tbl-title: Table   # (default is "Table")
   title-delim: "—"   # (default is ":")
 bibliography: references.bib
 ---
@@ -18,9 +21,9 @@ Quarto is a modern authoring system for reproducible documents that combines pro
 
 # Key features used in this report
 
-- Executable R code chunks with labels and options (for reproducibility and figure/table naming).
-- Automatic figure and table captions and cross-references via chunk options `fig-cap` and `tbl-cap`.
-- Citation support via a bibliography file.
+-   Executable R code chunks with labels and options (for reproducibility and figure/table naming).
+-   Automatic figure and table captions and cross-references via chunk options `fig-cap` and `tbl-cap`.
+-   Citation support via a bibliography file.
 
 ```{R}
 #| label: setup
@@ -35,13 +38,12 @@ library(ggplot2)
 data("penguins", package = "palmerpenguins")
 ```
 
-
 ## Simple data summary
+
 This report uses the palmerpenguins dataset to illustrate a typical data science report workflow: brief data summary, table output with gt, visualizations with ggplot2, and narrative text that references figures and tables. The Quarto/R workflow and chunk options used here follow patterns described in Quarto and R for Data Science documentation.
 
 ```{r}
 #| label: data-summary
-#| echo: false
 
 summary_tbl <- penguins %>%
   select(species, island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g) %>%
@@ -49,12 +51,12 @@ summary_tbl <- penguins %>%
 ```
 
 ## Table: species-level summary
+
 The table below summarizes key numeric variables grouped by species (mean and count). The table is generated with gt and captioned so it can be cross-referenced in the text (@tbl-species-summary).
 
 ```{r}
 #| label: tbl-species-summary
 #| tbl-cap: "Summary of numeric measurements by species."
-#| echo: false
 
 species_summary <- penguins %>%
   group_by(species) %>%
@@ -85,7 +87,8 @@ Refer to @tbl-species-summary for species summaries.
 ```{R}
 #| label: tbl-observations
 #| tbl-cap: "Numeric measurements of individuals."
-#| echo: false
+
+
 penguins %>%
   slice_head(n = 10) %>%
   gt() %>%
@@ -107,10 +110,12 @@ penguins %>%
     decimals = 0
   )
 ```
+
 Refer to @tbl-observations for the individual observations.
 
 ### Plots: distributions and comparisons
-The following figure shows body mass distributions by species (@fig-bodymass-by-species)). The chunk has a fig-cap so Quarto creates a numbered figure and allows cross-references.
+
+The following figure shows body mass distributions by species (@fig-bodymass-by-species). The chunk has a fig-cap so Quarto creates a numbered figure and allows cross-references.
 
 ```{r}
 #| label: fig-bodymass-by-species
@@ -122,8 +127,7 @@ ggplot(penguins, aes(x = body_mass_g, fill = species)) +
   labs(x = "Body mass (g)", y = "Density")
 ```
 
-@fig-bodymass-by-species shows differences in body mass distributions across the three penguin species.
-A scatter plot of bill length vs bill depth, colored by species, helps illustrate morphological differences (@fig-bill-scatter))
+@fig-bodymass-by-species shows differences in body mass distributions across the three penguin species. A scatter plot of bill length vs bill depth, colored by species, helps illustrate morphological differences (@fig-bill-scatter))
 
 ```{R}
 #| label: fig-bill-scatter
@@ -136,15 +140,14 @@ ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
 
 ```
 
-
 ## Inline code and dynamic text
+
 This document uses inline R to include computed values in prose. For example, the dataset contains `r sum(!is.na(penguins$body_mass_g))` recorded body mass measurements across all observations.
 
 ## Reproducibility and references
+
 Quarto uses knitr and Pandoc to run code and produce finished outputs; this workflow enables reproducible documents that combine narrative and analysis. For a compact tutorial and workshop materials, see the Quarto workshop and documentation resources referenced here.
 
 At the end of the file include a short "References" citation marker by adding a bibliography file `references.bib` and the YAML already references it.
 
 These references let you cite the workshop, Quarto site, and R for Data Science in your Quarto .qmd files using citation keys like @mock_quarto_workshop and @r4ds_quarto where needed. The narrative in index.qmd already references these resources with inline narrative citations using the bibliography.
-
-
