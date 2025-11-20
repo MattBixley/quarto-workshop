@@ -1,5 +1,9 @@
-## Get started with Quarto Workshop materials
+# Quarto Workshop
 
-This is the companion "Get started with Quarto" workshop materials for rstudio::conf 2022.
+This is a detached repository for the "Get started with Quarto" workshop by Thomas Mock at rstudio::conf 2022. Please see the workshop website: [https://rstudio-conf-2022.github.io/get-started-quarto/](https://rstudio-conf-2022.github.io/get-started-quarto/)
 
-For the full workshop materials, please see the workshop website: [https://rstudio-conf-2022.github.io/get-started-quarto/](https://rstudio-conf-2022.github.io/get-started-quarto/)
+## Otago Bioinformatics Spring School 2025
+
+This repository has been adapted for the Otago Bioinformatics Spring School 2025. The materials have been modified to suit the context of the spring school while retaining the core concepts of Quarto. For the full workshop materials, please see the workshop website: [https://biochemistry.otago.ac.nz/bioinformatics/spring-school/2025/](https://biochemistry.otago.ac.nz/bioinformatics/spring-school/2025/)
+
+Additional content here is in the penguins-report directory with a example reports showing citations, and refereencing figures and tables.
